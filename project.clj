@@ -3,13 +3,11 @@
   :url "http://example.com/FIXME"
 
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 ;; [org.clojure/clojurescript "0.0-2173"]
                  [org.clojure/clojurescript "0.0-2173"
                   :exclusions [org.clojure/google-closure-library
                                org.clojure/google-closure-library-third-party]]
                  [org.clojure/google-closure-library "0.0-20140226-71326067"]
                  [om "0.5.2"]
-                 ;; [com.keminglabs/c2 "0.2.3"]
                  ]
 
   :repositories [["gclosure"

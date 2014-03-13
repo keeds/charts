@@ -50,37 +50,6 @@
        (apply dom/g nil
               (om/build-all circ idx))))))
 
-;; (defn chart-line
-;;   [line owner]
-;;   (reify
-;;     om/IRender
-;;     (render
-;;      [this]
-;;      (let [[idx[label var]] line]
-;;        (dom/path #js {:id "path1"
-;;                       :d (path [1 5 2 9 10 2])
-;;                       :stroke "red"
-;;                       :strokeWidth 2
-;;                       :fill "none"}))
-;;      )))
-
-;; (defn p [xs]
-;;   (dom/path
-;;    #js {:id "path1"
-;;         :d (path xs)
-;;         :stroke "red"
-;;         :strokeWidth 2
-;;         :fill "none"}))
-
-;; (defn point [xs]
-;;   (->>
-;;    xs
-;;    (index)
-;;    (map #(dom/circle #js {:id "point1"
-;;                           :cx %1
-;;                           :cy %2
-;;                           :r 3}))))
-
 (defn c
   [app owner]
   (om/component
