@@ -1,6 +1,6 @@
 (ns charts.core
   (:require
-   [clojure.string :refer (join)]
+   [clojure.string :refer (join replace)]
    [om.core :as om :include-macros true]
    [om.dom :as dom :include-macros true]
    [goog.events :as events]
@@ -12,18 +12,63 @@
 
 
 ;; ============================================================================
+;; Tests
+
+(def test-data [[4 2 7 10 0 2 3]
+                [7 3 1  5 5 8 9]])
+
+
+;; ============================================================================
+;; Constants
+
+(def offset  25)
+(def width  500)
+(def height 300)
+(def xstep (/ width 7))
+(def ystep (/ height 10))
+
+
+;; ============================================================================
 ;; Utility functions
 
+
+(defn min-value [xs]
+  (->>
+   xs
+   flatten
+   (apply min)))
+
+
+(defn max-value [xs]
+  (->>
+   xs
+   flatten
+   (apply max)))
+
+
+(defn value-count [xs]
+  (->>
+   (map count xs)
+   (max-value)))
+
+
+;; (defn xstep [data offset width]
+;;   (-> width
+;;       (- (* 2 offset))
+;;       (/ (value-count data))))
+
+
 (defn index [data]
-  (map-indexed #(vec [(* %1 10) (* %2 10)]) data))
+  (map-indexed #(vec [(+ (* %1 xstep) offset) (+ (* %2 ystep) offset)]) data))
+
 
 (defn path [xs]
   (->>
-   (conj xs 0)
+   xs
    (index)
-   (map (fn [[x y]] (str "L " x " "y)))
-   (join " ")
-   (str "M 0 0 ")
+   (map (fn [[x y]] (str x " " y)))
+   (join " L ")
+   (str "M ")
    ))
 
 
@@ -39,7 +84,7 @@
       #js {:id "point1"
             :cx x
             :cy y
-            :r 3}))))
+            :r 4}))))
 
 (defn points [xs]
   (reify
@@ -50,7 +95,7 @@
        (apply dom/g nil
               (om/build-all circ idx))))))
 
-(defn c
+(defn paths
   [app owner]
   (om/component
    (dom/path
@@ -68,12 +113,11 @@
      [this]
      (apply dom/svg nil
             (concat
-             (om/build-all c app)
+             (om/build-all paths app)
              (om/build-all points app)))
      )))
 
 (om/root
  chart
- [[1 5 2 9 10 2]
-  [6 3 1 0  0 3]]
+ test-data
  {:target (. js/document (getElementById "om-svg"))})
